@@ -73,8 +73,41 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( /* user, newStory */) {
+  async addStory(user, newStory) {
     // UNIMPLEMENTED: complete this function!
+    //post request
+    //from the user input, we need the auth token? leave out for now
+    //https://hack-or-snooze-v3.herokuapp.com/stories
+    const bodyData = {
+      token: user.loginToken,
+      story: newStory
+    }
+
+    const response = await fetch("https://hack-or-snooze-v3.herokuapp.com/stories",
+    {
+      method: "POST",
+      body: JSON.stringify(bodyData),
+      headers: {
+        "Content-Type" : "application/json"
+      }
+    });
+
+    const responseData = await response.json();
+    console.log(`responseData is: ${responseData}`);
+    //responseData.story.[whatever]
+    //storyId, title, author, url, username, createdAt
+
+    const createdStory = new Story({
+      storyId : responseData.story.storyId,
+      title: responseData.story.title,
+      author: responseData.story.author,
+      url: responseData.story.url,
+      username: responseData.story.username,
+      createdAt : responseData.story.createdAt});
+      //refactor with object shorthand?
+
+    return createdStory;
+    //return a Story instance
   }
 }
 
