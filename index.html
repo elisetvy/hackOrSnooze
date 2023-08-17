@@ -33,7 +33,11 @@
     <div class="navbar-brand">
       <a class="nav-link" href="#" id="nav-all">Hack or Snooze</a>
       <!-- ADD A STORY (SUBMIT) LINK HERE -->
+    </div>
+    <div class="nav-left" style="display: none;">
       <a class="nav-link" href="#" id="story-submit-link">Submit</a>
+      <a class="nav-link" href="#" id="user-favorites">Favorites</a>
+      <a class="nav-link" href="#" id="my-stories">My Stories</a>
     </div>
     <div class="nav-right">
       <a class="nav-link" href="#" id="nav-login">login/signup</a>
@@ -50,9 +54,13 @@
     <!-- Form for adding a new story -->
 
     <form style="display: none" id="add-story-form">
-      <span>Author </span><input type="text" placeholder="author name" id="story-form-author"><br>
-      <span>Title </span><input type="text" placeholder="story title" id="story-form-title"><br>
-      <span>URL </span><input type="text" placeholder="story url" id="story-form-url"><br>
+
+      <label for="story-form-author">Author</label>
+      <input type="text" placeholder="author name" id="story-form-author"><br>
+      <label for="story-form-title">Title</label>
+      <input type="text" placeholder="story title" id="story-form-title"><br>
+      <label for="story-form-url">URL</label>
+      <input type="text" placeholder="story url" id="story-form-url"><br>
       <button type="submit" id="story-submit-button">Submit</button>
 
 

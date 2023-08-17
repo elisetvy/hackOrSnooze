@@ -55,23 +55,32 @@ function putStoriesOnPage() {
 // Call addStory
 // Put new story on page
 
-async function getAndDisplayStory() {
+/**
+ * A function that takes text data from a form, uses it in an API
+ * request by calling addStory, calls generateStoryMarkup,
+ * and then appends the resulting element to the DOM.
+ */
+async function getAndDisplayStory(event) {
+  event.preventDefault();
   console.log('submit success');
-  const $storyAuthor = $('#story-form-author').val();
-  const $storyTitle = $('#story-form-title').val();
-  const $storyURL = $('#story-form-url').val();
+  const storyAuthor = $('#story-form-author').val(); //just values, not jquery objects
+  const storyTitle = $('#story-form-title').val();
+  const storyURL = $('#story-form-url').val();
 
-  document.getElementById('add-story-form').reset();
+  $('#story-form-author').val('');
+  $('#story-form-title').val('');
+  $('#story-form-url').val('');
 
   const newStory = {
-    author: $storyAuthor,
-    title: $storyTitle,
-    url: $storyURL
+    author: storyAuthor,
+    title: storyTitle,
+    url: storyURL
   };
 
   const story = await storyList.addStory(currentUser, newStory); // returns Story instance
   const storyMarkup = generateStoryMarkup(story);
   $('#all-stories-list').prepend(storyMarkup);
+  $('#add-story-form').hide();
 }
 
 // Attach to submit form (on submit event)
