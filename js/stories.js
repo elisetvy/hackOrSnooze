@@ -50,3 +50,29 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+// Get form data
+// Call addStory
+// Put new story on page
+
+async function getAndDisplayStory() {
+  console.log('submit success');
+  const $storyAuthor = $('#story-form-author').val();
+  const $storyTitle = $('#story-form-title').val();
+  const $storyURL = $('#story-form-url').val();
+
+  document.getElementById('add-story-form').reset();
+
+  const newStory = {
+    author: $storyAuthor,
+    title: $storyTitle,
+    url: $storyURL
+  };
+
+  const story = await storyList.addStory(currentUser, newStory); // returns Story instance
+  const storyMarkup = generateStoryMarkup(story);
+  $('#all-stories-list').prepend(storyMarkup);
+}
+
+// Attach to submit form (on submit event)
+$('#story-submit-button').on('click', getAndDisplayStory);
