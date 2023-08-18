@@ -38,8 +38,6 @@
   display: block;
 }
 
-.star::before {
-  font-size: 0.75rem;
-    margin: 0 2px;
-    cursor: pointer;
+.fave-star {
+
 }

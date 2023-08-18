@@ -46,3 +46,5 @@ function navSubmitClick() {
 }
 
 $('#story-submit-link').on('click', navSubmitClick);
+
+

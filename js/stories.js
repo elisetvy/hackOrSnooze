@@ -26,7 +26,7 @@ function generateStoryMarkup(story) {
   return $(`
       <li id="${story.storyId}">
       <span class="fave-star">
-      <i class="bi-star"></i>
+      <i class="bi-star testing"></i>
       </span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
@@ -88,3 +88,13 @@ async function getAndDisplayStory(event) {
 
 // Attach to submit form (on submit event)
 $('#story-submit-button').on('click', getAndDisplayStory);
+
+function getAndDisplayFavorite(event) {
+  console.log('changestar function called');
+  $(event.target).attr("class", "bi-star-fill");
+  console.log(event.target);
+
+}
+
+//$(".fave-star").on("click", () => console.log("fave-star class clicked"));
+$("#all-stories-list").on("click", ".fave-star", getAndDisplayFavorite);
