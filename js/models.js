@@ -80,7 +80,7 @@ class StoryList {
     const bodyData = {
       token: user.loginToken,
       story: newStory
-    }
+    };
 
     const response = await fetch(
       "https://hack-or-snooze-v3.herokuapp.com/stories",
@@ -88,7 +88,7 @@ class StoryList {
         method: "POST",
         body: JSON.stringify(bodyData),
         headers: {
-          "Content-Type" : "application/json"
+          "Content-Type": "application/json"
         }
       }
     );
@@ -99,7 +99,7 @@ class StoryList {
     //responseData.story.[whatever]
     //storyId, title, author, url, username, createdAt
 
-      const createdStory = new Story(storyData.story);
+    const createdStory = new Story(storyData.story);
 
     storyList.stories.unshift(createdStory);
     return createdStory;
@@ -228,5 +228,45 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
+  }
+
+  async addFavorite(story) {
+    const username = this.username;
+    const storyId = story.storyId;
+
+    const response = await fetch(`${BASE_URL}/users/${username}/favorites/${storyId}`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          "token": this.loginToken
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+    this.favorites.push(story);
+  }
+
+  async deleteFavorite(story) {
+    const username = this.username;
+    const storyId = story.storyId;
+
+    const response = await fetch(`${BASE_URL}/users/${username}/favorites/${storyId}`,
+      {
+        method: "DELETE",
+        body: JSON.stringify({
+          "token": this.loginToken
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+    // NEED TO FIND ELEMENT IN ARRAY THAT MATCHES STORY / STORY ID
+    // DELETE THAT ELEMENT (SPLICE?)
+    // FILTER METHOD
+
+    this.favorites = this.favorites.filter(storyObj => JSON.stringify(storyObj) !== JSON.stringify(story));
   }
 }
