@@ -104,7 +104,6 @@ class StoryList {
 
     //call this storyData
     const storyData = await response.json();
-    console.log(`responseData is: ${storyData}`);
     //responseData.story.[whatever]
     //storyId, title, author, url, username, createdAt
 
@@ -241,6 +240,11 @@ class User {
 
   //TODO: add docstrings
 
+  /**
+   * Takes in a Story instance and adds it to the current user's favorites
+   * It also calls the API to alert it that the user's account has favorited
+   * a story with a certain storyId string.
+   */
   async addFavorite(story) {
     const username = this.username;
     const storyId = story.storyId;
@@ -259,6 +263,11 @@ class User {
     this.favorites.push(story);
   }
 
+  /**
+   * Takes in a Story instance and removes it from the current user's favorites
+   * It also calls the API to alert it that the user's account has unfavorited
+   * a story with a certain storyId string.
+   */
   async deleteFavorite(story) {
     const username = this.username;
     const storyId = story.storyId;
@@ -279,5 +288,12 @@ class User {
     // FILTER METHOD
 
     this.favorites = this.favorites.filter(storyObj => JSON.stringify(storyObj) !== JSON.stringify(story));
+  }
+
+  /** A method to check whether a story is within a User instance's favorites
+   * array. It takes a storyId string as input.
+   */
+  isInFavorites(storyId) {
+    return this.favorites.some((element) => element.storyId === storyId);
   }
 }

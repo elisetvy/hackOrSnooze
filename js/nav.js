@@ -13,7 +13,7 @@ function navAllStories(evt) {
   putStoriesOnPage();
 
   if (currentUser) {
-    $(".fave-star").show(); // TODO: refactor - create a function to show fave stars
+    $(".fave-star").show(); // TODO: refactor? - create a function to show fave stars
   }
 }
 
@@ -42,6 +42,9 @@ function updateNavOnLogin() {
   $navLogin.hide();
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
+  //added below
+  $loginForm.hide();
+  $signupForm.hide();
 }
 
 /** Reveals add new story form. */
@@ -56,18 +59,21 @@ function navSubmitClick(evt) {
 
 $('#story-submit-link').on('click', navSubmitClick);
 
-// Handles Favorites click
 
+/** Handles Favorites click on nav bar, repopulating story list with only
+ * the user's favorited stories */
 function navFavoritesClick(evt) {
   evt.preventDefault();
   hidePageComponents();
   $allStoriesList.empty();
+ /*  console.log('newFavoritesClick executing'); */
 
   if (currentUser.favorites.length === 0) {
     $allStoriesList.append('<p>No favorites added!</p>');
   }
 
   for (let story of currentUser.favorites) {
+    /* console.log('building new storyList from user faves'); */
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
   }

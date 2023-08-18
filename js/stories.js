@@ -24,7 +24,7 @@ function generateStoryMarkup(story) {
   let iconClass = "bi-star bi-star-fill";
 
   if (currentUser) {
-    if (isInFavorites(story.storyId)) {
+    if (currentUser.isInFavorites(story.storyId)) {
       iconClass = "bi-star-fill";
     }
   }
@@ -34,6 +34,7 @@ function generateStoryMarkup(story) {
   //check if story is in favs array. if yes, icon class is bi-star-fill
   //if not, icon class is bi-star
   //I think we should check by storyId, (func on bottom of page)
+
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
@@ -94,47 +95,32 @@ async function getAndDisplayStory(event) {
   const story = await storyList.addStory(currentUser, newStory); // returns Story instance
   const storyMarkup = generateStoryMarkup(story);
   $('#all-stories-list').prepend(storyMarkup);
+  $('.fave-star').show();
   $('#add-story-form').hide();
 }
 
 // Attach to submit form (on submit event)
 $('#story-submit-button').on('click', getAndDisplayStory);
 
-//handleFavStarClick?
-async function getAndDisplayFavorite(event) {
-  //localStorage.setItem()
-  //if story next to star is in favorites, call cuurentUser.deletefav
-  //if it is not in favorites, call currentUser.addFavorite
-  //
+/** Handles the addition or deletion of favorites, triggered by the
+ * user clicking on the star next to a story.
+ */
+async function handleFaveStarClick(event) {
+
   const favStoryId = $(event.target).closest("li").attr("id");
-  //use this id to search storyList, retrieve a Story object.
-  //Pass that object to addFavorite or deleteFavorite
-  /* if (!isInFavorites(favStoryId)) {
-    currentUser.addFavorite();
-  } */
+
   $(event.target).toggleClass("bi-star");
 
-  const clickedStory = await Story.getStoryInstance(favStoryId); // returns Story instance / object
-  console.log("clicked story is", clickedStory);
+  const clickedStoryData = await Story.getStoryInstance(favStoryId);
 
-  if (isInFavorites(favStoryId)) {
+  const clickedStory = new Story(clickedStoryData.story);
+
+  if (currentUser.isInFavorites(favStoryId)) {
     currentUser.deleteFavorite(clickedStory);
   } else {
     currentUser.addFavorite(clickedStory);
   }
 
 }
-// TODO: add as static method to Story class
-// returns story object (arg for add/delete fave)
-function getStoryByID(targetId) {
-  const foundStory = storyList.stories.find((element) => element.storyId === targetId);
-  return foundStory;
-}
 
-// checks if in favorites array; returns boolean
-function isInFavorites(storyId) {
-  return currentUser.favorites.some((element) => element.storyId === storyId);
-}
-
-//$(".fave-star").on("click", () => console.log("fave-star class clicked"));
-$("#all-stories-list").on("click", ".star-icon", getAndDisplayFavorite);
+$("#all-stories-list").on("click", ".star-icon", handleFaveStarClick);
