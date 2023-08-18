@@ -33,6 +33,8 @@ function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
   $(".main-nav-links").show();
   $(".nav-left").show();
+  //se span with stars to show?
+  $(".fave-star").show();
   $navLogin.hide();
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
@@ -46,5 +48,3 @@ function navSubmitClick() {
 }
 
 $('#story-submit-link').on('click', navSubmitClick);
-
-

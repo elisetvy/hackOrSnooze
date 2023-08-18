@@ -22,11 +22,15 @@ async function getAndShowStoriesOnStart() {
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
+
+  //check if story is in favs array. if yes, icon class is bi-star-fill
+  //if not, icon class is bi-star
+  //I think we should check by storyId, (func on bottom of page)
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-      <span class="fave-star">
-      <i class="bi-star testing"></i>
+      <span class="fave-star" style="display: none">
+      <i class="bi-star bi-star-fill"></i>
       </span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
@@ -89,12 +93,38 @@ async function getAndDisplayStory(event) {
 // Attach to submit form (on submit event)
 $('#story-submit-button').on('click', getAndDisplayStory);
 
-function getAndDisplayFavorite(event) {
+//handleFavStarClick?
+async function getAndDisplayFavorite(event) {
   console.log('changestar function called');
-  $(event.target).attr("class", "bi-star-fill");
-  console.log(event.target);
+  //localStorage.setItem()
+  //if story next to star is in favorites, call cuurentUser.deletefav
+  //if it is not in favorites, call currentUser.addFavorite
+  //
+  const favStoryId = $(event.target).closest("li").attr("id");
+  //use this id to search storyList, retrieve a Story object.
+  //Pass that object to addFavorite or deleteFavorite
+  console.log(favStoryId);
+  /* if (!isInFavorites(favStoryId)) {
+    currentUser.addFavorite();
+  } */
+
+  $(event.target).toggleClass("bi-star");
+  console.log($(event.target).attr("class"));
+
+  const iconClass = $(event.target).attr("class");
+  localStorage.setItem("class", iconClass);
+  console.log(storyList);
 
 }
+
+function getStoryByID(targetId) {
+  const foundStory = storyList.find((element) => element.storyId === targetId);
+  return foundStory;
+}
+
+/* function isInFavorites(storyId) {
+  return currentUser.favorites.some((element) => element.storyId === storyId);
+} */
 
 //$(".fave-star").on("click", () => console.log("fave-star class clicked"));
 $("#all-stories-list").on("click", ".fave-star", getAndDisplayFavorite);
