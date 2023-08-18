@@ -13,7 +13,7 @@ function navAllStories(evt) {
   putStoriesOnPage();
 
   if (currentUser) {
-    $(".fave-star").show();
+    $(".fave-star").show(); // TODO: refactor - create a function to show fave stars
   }
 }
 

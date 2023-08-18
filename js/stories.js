@@ -21,17 +21,14 @@ async function getAndShowStoriesOnStart() {
 
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
-  let iconClass;
+  let iconClass = "bi-star bi-star-fill";
 
   if (currentUser) {
     if (isInFavorites(story.storyId)) {
       iconClass = "bi-star-fill";
-    } else {
-      iconClass = "bi-star bi-star-fill";
     }
-  } else {
-    iconClass = "bi-star bi-star-fill";
   }
+
 
 
   //check if story is in favs array. if yes, icon class is bi-star-fill
@@ -118,8 +115,6 @@ async function getAndDisplayFavorite(event) {
 
   $(event.target).toggleClass("bi-star");
 
-  console.log("icon class", $(event.target).attr("class"));
-
   const clickedStory = getStoryByID(favStoryId); // returns Story instance / object
 
   if (isInFavorites(favStoryId)) {
@@ -129,7 +124,7 @@ async function getAndDisplayFavorite(event) {
   }
 
 }
-
+// TODO: add as static method to Story class
 // returns story object (arg for add/delete fave)
 function getStoryByID(targetId) {
   const foundStory = storyList.stories.find((element) => element.storyId === targetId);
