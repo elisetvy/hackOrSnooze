@@ -28,6 +28,15 @@ class Story {
     return new URL(this.url).host;
     //return "hostname.com";
   }
+
+  static async getStoryInstance(storyId) {
+    const response = await fetch(
+      `${BASE_URL}/stories/${storyId}`
+    );
+
+    const storyInstance = await response.json();
+    return storyInstance;
+  }
 }
 
 
@@ -229,6 +238,8 @@ class User {
       return null;
     }
   }
+
+  //TODO: add docstrings
 
   async addFavorite(story) {
     const username = this.username;

@@ -112,10 +112,10 @@ async function getAndDisplayFavorite(event) {
   /* if (!isInFavorites(favStoryId)) {
     currentUser.addFavorite();
   } */
-
   $(event.target).toggleClass("bi-star");
 
-  const clickedStory = getStoryByID(favStoryId); // returns Story instance / object
+  const clickedStory = await Story.getStoryInstance(favStoryId); // returns Story instance / object
+  console.log("clicked story is", clickedStory);
 
   if (isInFavorites(favStoryId)) {
     currentUser.deleteFavorite(clickedStory);
