@@ -21,6 +21,17 @@ async function getAndShowStoriesOnStart() {
 
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
+  let iconClass;
+
+  if (currentUser) {
+    if (isInFavorites(story.storyId)) {
+      iconClass = "bi-star-fill";
+    } else {
+      iconClass = "bi-star bi-star-fill";
+    }
+  } else {
+    iconClass = "bi-star bi-star-fill";
+  }
 
 
   //check if story is in favs array. if yes, icon class is bi-star-fill
@@ -30,7 +41,7 @@ function generateStoryMarkup(story) {
   return $(`
       <li id="${story.storyId}">
       <span class="fave-star" style="display: none">
-      <i class="bi-star bi-star-fill"></i>
+      <i class="${iconClass} star-icon"></i>
       </span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
@@ -69,7 +80,6 @@ function putStoriesOnPage() {
  */
 async function getAndDisplayStory(event) {
   event.preventDefault();
-  console.log('submit success');
   const storyAuthor = $('#story-form-author').val(); //just values, not jquery objects
   const storyTitle = $('#story-form-title').val();
   const storyURL = $('#story-form-url').val();
@@ -95,7 +105,6 @@ $('#story-submit-button').on('click', getAndDisplayStory);
 
 //handleFavStarClick?
 async function getAndDisplayFavorite(event) {
-  console.log('changestar function called');
   //localStorage.setItem()
   //if story next to star is in favorites, call cuurentUser.deletefav
   //if it is not in favorites, call currentUser.addFavorite
@@ -103,28 +112,34 @@ async function getAndDisplayFavorite(event) {
   const favStoryId = $(event.target).closest("li").attr("id");
   //use this id to search storyList, retrieve a Story object.
   //Pass that object to addFavorite or deleteFavorite
-  console.log(favStoryId);
   /* if (!isInFavorites(favStoryId)) {
     currentUser.addFavorite();
   } */
 
   $(event.target).toggleClass("bi-star");
-  console.log($(event.target).attr("class"));
 
-  const iconClass = $(event.target).attr("class");
-  localStorage.setItem("class", iconClass);
-  console.log(storyList);
+  console.log("icon class", $(event.target).attr("class"));
+
+  const clickedStory = getStoryByID(favStoryId); // returns Story instance / object
+
+  if (isInFavorites(favStoryId)) {
+    currentUser.deleteFavorite(clickedStory);
+  } else {
+    currentUser.addFavorite(clickedStory);
+  }
 
 }
 
+// returns story object (arg for add/delete fave)
 function getStoryByID(targetId) {
-  const foundStory = storyList.find((element) => element.storyId === targetId);
+  const foundStory = storyList.stories.find((element) => element.storyId === targetId);
   return foundStory;
 }
 
-/* function isInFavorites(storyId) {
+// checks if in favorites array; returns boolean
+function isInFavorites(storyId) {
   return currentUser.favorites.some((element) => element.storyId === storyId);
-} */
+}
 
 //$(".fave-star").on("click", () => console.log("fave-star class clicked"));
-$("#all-stories-list").on("click", ".fave-star", getAndDisplayFavorite);
+$("#all-stories-list").on("click", ".star-icon", getAndDisplayFavorite);

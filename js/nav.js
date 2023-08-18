@@ -11,6 +11,10 @@ function navAllStories(evt) {
   evt.preventDefault();
   hidePageComponents();
   putStoriesOnPage();
+
+  if (currentUser) {
+    $(".fave-star").show();
+  }
 }
 
 $body.on("click", "#nav-all", navAllStories);
@@ -42,9 +46,34 @@ function updateNavOnLogin() {
 
 /** Reveals add new story form. */
 
-function navSubmitClick() {
+function navSubmitClick(evt) {
+  evt.preventDefault();
+  putStoriesOnPage();
+  $('.fave-star').show();
   $('#add-story-form').show()
-                      .css("display", "block");
+    .css("display", "block");
 }
 
 $('#story-submit-link').on('click', navSubmitClick);
+
+// Handles Favorites click
+
+function navFavoritesClick(evt) {
+  evt.preventDefault();
+  hidePageComponents();
+  $allStoriesList.empty();
+
+  if (currentUser.favorites.length === 0) {
+    $allStoriesList.append('<p>No favorites added!</p>');
+  }
+
+  for (let story of currentUser.favorites) {
+    const $story = generateStoryMarkup(story);
+    $allStoriesList.append($story);
+  }
+
+  $(".fave-star").show();
+  $allStoriesList.show();
+}
+
+$('#user-favorites').on('click', navFavoritesClick);
